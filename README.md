@@ -31,32 +31,32 @@
 <img src="images/application_registration.png"/>
 
 ## Authorization Grant
-- Theo như Flow trên, 4 bước đầu tiên sử dụng để lấy authorization grant và access token. **Authorization grant type** phụ thuộc vào phương thức sử dụng để yêu cầu ủy quyền. OAuth2 định nghĩa 4 loại grant type:
+- Theo như Flow trên, 4 bước đầu tiên sử dụng để lấy ủy quyền (authorization grant) và access token. **Authorization grant type** phụ thuộc vào phương thức sử dụng để yêu cầu ủy quyền. OAuth2 định nghĩa 4 loại grant type:
   + Authorization Code: Sử dụng với các ứng dụng phía Server
-  + Implicit: Sử dụng với các Mobile App hoặc Web App
+  + Implicit: Sử dụng với các Mobile App (ứng dụng chạy trên thiết bị của user) hoặc Web App (Browser App)
   + Resource Owner Password Credentials: Sử dụng với các ứng dụng đáng tin cậy, ví dụ như các ứng dụng do chính service sở hữu.
-  + Client Credentials: Sử dụng vơí ứng dụng truy cập API.
+  + Client Credentials: Sử dụng vơí ứng dụng truy cập thông qua API.
 ### Grant type: Authorization Code
 - Đây là loại cấp mã ủy quyền được sử dụng phổ biến nhất vì nó tối ưu hóa cho các ứng dụng phía server, nơi source code không công khai và **client secret** được duy trì bảo mật.
-- Đây là luồng dựa trên chuyển hướng, nên ứng dụng phải có khả năng tương tác với tác nhân người dùng (user-agent)và nhận API authorization code thông qua user-agent.
+- Đây là luồng dựa trên chuyển hướng, nên ứng dụng phải có khả năng tương tác với tác nhân người dùng (user-agent) và nhận API authorization code thông qua user-agent.
 - Flow:
 <img src="https://assets.digitalocean.com/articles/oauth/auth_code_flow.png" alt="Authorization Code Flow">
 
-  + Authorization Code Link: Đầu tiên user được cung cấp một liên kết **authorization code** có dạng như sau:
+  + Yêu cầu authorization code: Đầu tiên user được cung cấp một liên kết để nhận **authorization code** có dạng như sau:
   <pre class="code-pre "><code langs="">https://cloud.digitalocean.com/v1/oauth/authorize?response_type=code&amp;client_id=<span class="highlight">CLIENT_ID</span>&amp;redirect_uri=<span class="highlight">CALLBACK_URL</span>&amp;scope=<span class="highlight">read</span>
 </code></pre>
 
-  + User Authorizes Application (Người dùng ủy quyền cho ứng dụng):
+  + Người dùng ủy quyền cho ứng dụng:
   <img src="https://assets.digitalocean.com/articles/oauth/authcode.png" alt="Authorization Code Link">
   
-  + Application Receives Authorization Code: Khi user cho phép quyền truy cập, dịch vụ sẽ chuyển hướng user-agent đến URI được chỉ định cùng với **authorization code**
+  + Application nhận Authorization Code: Khi user cho phép quyền truy cập, dịch vụ sẽ chuyển hướng người dùng đến URI(đã được đăng ký trước đó), Applicaiton sẽ lưu lại **authorization code**
   <pre class="code-pre "><code langs="">https://dropletbook.com/callback?code=<span class="highlight">AUTHORIZATION_CODE</span></code></pre>
   
-  + Application Requests Access Token:
+  + Application yêu cầu Access Token:
   <pre class="code-pre "><code langs="">https://cloud.digitalocean.com/v1/oauth/token?client_id=<span class="highlight">CLIENT_ID</span>&amp;client_secret=<span class="highlight">CLIENT_SECRET</span>&amp;grant_type=authorization_code&amp;code=<span class="highlight">AUTHORIZATION_CODE</span>&amp;redirect_uri=<span class="highlight">CALLBACK_URL</span>
 </code></pre>
 
-  + Application Receives Access Token:
+  + Application nhận Access Token:
   <pre class="code-pre "><code langs="">{"access_token":"<span class="highlight">ACCESS_TOKEN</span>","token_type":"bearer","expires_in":2592000,"refresh_token":"<span class="highlight">REFRESH_TOKEN</span>","scope":"read","uid":100101,"info":{"name":"Mark E. Mark","email":"mark@thefunkybunch.com"}}
 </code></pre>
 
