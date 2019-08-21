@@ -106,7 +106,7 @@
 # Login with Facebook
 - Facebook SDK dành cho Android cho phép mọi người đăng nhâp vào ứng dụng bằng tài khoản Facebook.
 - Làm theo các bước duới đây để thêm Facebook Login vào ứng dụng của bạn:
-- Link: <a href="https://developers.facebook.com/docs/facebook-login/android?sdk=maven">Facebook Login/a>
+- Link: <a href="https://developers.facebook.com/docs/facebook-login/android?sdk=maven">Facebook Login</a>
   
 1. Chọn ứng dụng hoặc tạo ứng dụng mới
 <img src="images/choose_app_st1.png"/>
@@ -147,16 +147,22 @@
 8. Thêm nút Đăng nhập Facebook.
 - Cách đơn giản nhất để thêm là sử dụng **LoginButton** từ SDK. Đây là thành phần giao diện người dùng bao phủ chức năng có trong **LoginManager**.
 
-9 Đăng ký gọi lại
+9. Đăng ký gọi lại
 - Tạo một đối tượng callbackManager để nhận các phản hồi đăng nhập:
-<img src=""/>
+<img src="images/callback_manager.png"/>
 
 - Thêm các quyền cần thiết khi tiến hành Login với tài khoản Facebook. Tham khảo <a href="https://developers.facebook.com/docs/facebook-login/android/permissions">tại đây</a>
-<img src=""/>
+<img src="images/permissions.png"/>
+
+<img src="images/login_permission.png"/>
 
 - Đăng ký callback để nhận trạng thái đăng nhập:
   + Nếu sử dụng **LoginButton*:
+<img src="images/register_button_facebook.png"/>
+
   + Nếu sử dụng Custom button thì sử dụng **LoginManager*
+
+<img src="images/register_custom_button.png"/>
   
 - Chuyển kết quả đăng nhập đến LoginManager thông qua callbackManager.
 
