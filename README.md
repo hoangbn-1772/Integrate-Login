@@ -10,10 +10,10 @@
 - Quay lại phần đặt vấn đề một chút, bây giờ bạn chỉ cần có một tài khoản Facebook/Google/Twitter là bạn có thể đăng nhập vào nhiều ứng dụng khác nhau mà không phải nhớ tài khoản nữa (awesome)
 
 - OAuth2 làm việc với 4 đối tượng với các vai trò khác nhau:
-  + Resource Owner (User): Là người dùng cho phép ứng dụng truy cập vào tài khoản của họ và có thể sử dụng dữ liệu. Quyền truy cập vào dữ liệu của người dùng được giới hạn trong phạm vi được cấp (quyền truy cập đọc hoặc ghi)
+  + Resource Owner (User): là chủ sở hữu dữ liệu muốn chia sẻ. Quyền truy cập vào dữ liệu của người dùng được giới hạn trong phạm vi được cấp (quyền truy cập đọc hoặc ghi)
   + Client (Application): Là ứng dụng muốn truy cập vào dữ liệu của người dùng. Cần phải được người dùng ủy quyền và được xác thực bởi API (Facebook, Twitter, Google...)
-  + Resource Server (API): Là nơi lưu trữ các tài khoản người dùng và được bảo mật.
-  + Authorization Server (API): Kiểm tra thông tin người dùng, sau đó cung cấp **token** để truy cập vào ứng dụng.
+  + Resource Server (API): là server chứa thông tin dữ liệu cần chia sẻ.
+  + Authorization Server (API): Kiểm tra thông tin người dùng, sau đó cung cấp **token** để truy cập vào dữ liệu cho client
   
 ## OAuth2 hoạt động như thế nào?
 
@@ -62,21 +62,43 @@
 
 ### Grant type: Implicit
 - Được sử dụng cho mobile apps và web application, nơi **client secret** không được bảo mật.
-- Là một luồng dựa trên chuyển hướng nhưng **access token** được cung cấp cho người dùng để chuyển tiếp đến ứng dụng. Do đó, nó có thể được hiển thị cho người dùng và các ứng dụng khác trên thiết bị của người dùng. Ngoài ra, luồng này không xác thực danh tính của ứng dụng, dựa vào URI chuyển hướng để phục vụ mục đích này.
-- Không support refresh tokens.
-- Flow:
+- Được coi như một **redirection-based flow** trong đó **access token** được đưa đến Application thông qua Browser. Do đó, phương thức ủy quyền này không xác thực ID của ứng dụng mà tin tưởng hoàn toàn vào **redirect URI**.
+- Không support **refresh tokens**.
+- Flow: Ta có thể hiểu đơn giản luồng hoạt động như sau: Application gửi yêu cầu ủy quyền đến User, sau đó Authorization Server truyền thằng access token đến Browser và sau đó truyền lại cho Application.
+
 <img src="https://assets.digitalocean.com/articles/oauth/implicit_flow.png" alt="Implicit Flow">
 
+  + User yêu cầu access_token: Tương tự Authorization Code, chỉ khác ở tham số response_type=token
+  <h3 id="step-2-user-authorizes-application">Step 2: User Authorizes Application</h3>
+  
+  + User ủy quyền cho Application: Tương tự Authorization Code
+  + Browser nhận access_token thông qua Redirect URI:
+  <pre class="code-pre "><code langs="">https://dropletbook.com/callback#token=<span class="highlight">ACCESS_TOKEN</span>
+</code></pre>
+
+  + Browser duy trì access_token: Sau khi được chuyển hướng về **redirect_uri**, nhiệm vụ của Browser là duy trì **access_token**. Ngoài ra tùy từng Service sẽ có thêm những tham số khác để điều hướng quay trở lại ứng dụng.
+  + Application trích xuất access_token: Từ URL trả về có chứa **access_token** nhiệm vụ phải thực hiện là trích xuất ra **access_token**
+  + access_token được gửi đến Application: Sau khi lấy được **access_token** thì nó sẽ được chuyển về ứng dụng. Đến đây quá trình ủy quyền hoàn tất và ứng dụng có thể sử dụng **access_token**.
+
 ### Grant type: Resource Owner Password Credentials
-- User cung cấp thông tin đăng nhập trực tiếp cho ứng dụng để nhận **access token** từ service.
-- Chỉ nên sử dụng loại này nếu khi các luồng khác không khả thi. Ngoài ra, chỉ nên được sử dụng nếu ứng dụng được người dùng tin cậy
+- User cung cấp thông tin đăng nhập trực tiếp cho ứng dụng để lấy **access token** từ service.
+- Chỉ nên sử dụng với các ứng dụng được người dùng tin cậy.
 - Sau khi user cung cấp thông tin đăng nhập cho ứng dụng, ứng dụng sẽ yêu cầu **access token** từ authorization server.
 <pre class="code-pre "><code langs="">https://oauth.example.com/token?grant_type=password&amp;username=<span class="highlight">USERNAME</span>&amp;password=<span class="highlight">PASSWORD</span>&amp;client_id=<span class="highlight">CLIENT_ID</span>
 </code></pre>
 
 ### Grant type: Client Credentials
-- Cung cấp cho ứng dụng một cách để truy cập vào tài khoản dịch vụ của chính mình. Ví dụ như ứng dụng muốn cập nhật description đã đăng ký hoặc chuyển hướng URI, hoặc truy cập vào dữ liệu khác được lưu trữ trong tài khoản của mình thông qua API.
-- Flow: Ứng dụng yêu cầu **access token** bằng cách gửi thông tin đăng nhập (client ID và client secret) authorization server.
+- Loại ủy quyền này phục vụ cho việc truy cập vào chính thông tin tài khoản của Application tại service. Ví dụ như Application muốn thay đổi thông tin description hoặc redirect_uri... User không tham gia vào quá trình ủy quyền.
+- Flow: Ứng dụng yêu cầu **access token** bằng cách gửi thông tin đăng nhập (client ID và client secret) là có thể thực hiện quá trình ủy quyền:
+<pre class="code-pre "><code langs="">https://oauth.example.com/token?grant_type=client_credentials&amp;client_id=CLIENT_ID&amp;client_secret=CLIENT_SECRET
+</code></pre>
 
-TLTK:
-https://viblo.asia/p/introduction-to-oauth2-3OEqGjDpR9bL
+## Sử dụng Access Token
+- Sau khi đã có **access_token**, có thể sử dụng để truy cập vào tài khoản người dùng thông qua API.
+<code langs="">curl -X POST -H "Authorization: Bearer <span class="highlight">ACCESS_TOKEN</span>""https://api.digitalocean.com/v2/<span class="highlight">$OBJECT</span>" 
+</code>
+
+## Refresh Token Flow
+- Nếu **access_token** hết hạn, thì khi sử dụng để gọi API sẽ gặp thông báo lỗi "Invalid Token Error". Đừng lo, nếu Service hỗ trợ cơ chế **refresh token** ta có thể sử dụng để yêu cầu **access_token** mới.
+<code langs="">https://cloud.digitalocean.com/v1/oauth/token?grant_type=refresh_token&amp;client_id=<span class="highlight">CLIENT_ID</span>&amp;client_secret=<span class="highlight">CLIENT_SECRET</span>&amp;refresh_token=<span class="highlight">REFRESH_TOKEN</span>
+</code>
