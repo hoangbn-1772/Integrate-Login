@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">IntegrateLogin</string>
+    <string name="custom_fb_login">Facebook Login</string>
+    <string name="custom_fb_logout">Facebook Logout</string>
+
+    <!--Facebook-->
+    <string name="facebook_app_id">482332635894680</string>
+    <string name="fb_login_protocol_scheme">fb482332635894680</string>
+
+</resources>
