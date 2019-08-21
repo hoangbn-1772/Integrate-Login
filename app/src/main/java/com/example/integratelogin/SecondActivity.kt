@@ -60,7 +60,7 @@ class SecondActivity : AppCompatActivity(), View.OnClickListener {
                 // currentAccessToken when it's loaded or set.
             }
         }
-
+        accessTokenTracker.startTracking()
         // If the access token is available already assign it.
         val accessToken = AccessToken.getCurrentAccessToken()
     }
@@ -82,6 +82,7 @@ class SecondActivity : AppCompatActivity(), View.OnClickListener {
                 // Implements
             }
         }
+        profileTracker.startTracking()
     }
 
     companion object {

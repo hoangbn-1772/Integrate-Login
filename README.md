@@ -102,3 +102,76 @@
 - Nếu **access_token** hết hạn, thì khi sử dụng để gọi API sẽ gặp thông báo lỗi "Invalid Token Error". Đừng lo, nếu Service hỗ trợ cơ chế **refresh token** ta có thể sử dụng để yêu cầu **access_token** mới.
 <code langs="">https://cloud.digitalocean.com/v1/oauth/token?grant_type=refresh_token&amp;client_id=<span class="highlight">CLIENT_ID</span>&amp;client_secret=<span class="highlight">CLIENT_SECRET</span>&amp;refresh_token=<span class="highlight">REFRESH_TOKEN</span>
 </code>
+
+# Login with Facebook
+- Facebook SDK dành cho Android cho phép mọi người đăng nhâp vào ứng dụng bằng tài khoản Facebook.
+- Làm theo các bước duới đây để thêm Facebook Login vào ứng dụng của bạn:
+- Link: <a href="https://developers.facebook.com/docs/facebook-login/android?sdk=maven">Facebook Login/a>
+  
+1. Chọn ứng dụng hoặc tạo ứng dụng mới
+<img src="images/choose_app_st1.png"/>
+
+2. Tải xuống ứng dụng Facebook nếu chưa có: <a role="button" class="_42ft _3g_o _3g_p _3g_u" href="https://play.google.com/store/apps/details?id=com.facebook.katana&amp;fbclid=IwAR2sahItcGmas46TkPcG47R38gnLx860GRQPM2ZW2GYSTi3iM50KyeZEwuM" target="_blank" rel="nofollow" data-lynx-mode="asynclazy" data-lynx-uri="https://l.facebook.com/l.php?u=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.facebook.katana%26fbclid%3DIwAR2sahItcGmas46TkPcG47R38gnLx860GRQPM2ZW2GYSTi3iM50KyeZEwuM&amp;h=AT0q1EE4F3Qa3TnATRjFCsGKeG1GiyqrANXN-mz-yJsDpBlgPqQZKKB4VOvdbP4o0MFidckGKowhT1vGWc6KycApb9hC8hCkUa47Y5tcf-R35JT3OfAXde2cXx77EQ">Tải xuống Facebook dành cho Android</a>
+
+3. Tích hợp Facebook SDK
+- Facebook Login SDK dành cho Android là một thành phần của <a href="https://developers.facebook.com/docs/android/componentsdks">SDK Facebook dành cho Android</a>. Để sử dụng trong project hãy biến SDK này thành phụ thuộc trong Maven hoặc tải xuống. Ở đây mình sẽ thêm phụ thuộc vào Maven.
+
+  a. Trong build.gradle(project), đảm bảo kho lưu trữ **jcenter()** được liệt kê trong **buildscript { repositories {}}**
+  
+  b. Trong build.gradle(Module:app) thêm thư viện: implementation 'com.facebook.android:facebook-login:5.4.0
+  
+  c. Khi sử dụng Facebook Login SDK, sự kiện trong ứng dụng của bạn sẽ tự động được ghi lại và thu thập lại. Bạn có thể vô hiệu hóa tính năng này. Tham khảo: <a href="/docs/app-events/automatic-event-collection-detail">Ghi sự kiện trong ứng dụng tự động</a>
+ 
+4. Chỉnh sửa resource và tệp manifest
+- Tạo chuỗi cho ID ứng dụng Facebook và các chuỗi cần để bật Tab tùy chỉnh của Chrome. Thêm FacebookActivity vào Manifest.xml
+  a. Thêm phần sau vào file strings.xml
+   
+  b. Thêm quyền INTERNET.
+    
+  c. Thêm thành phần meta-data, FacebookActivity.
+  
+5. Liên kết package name và default class vaof ứng dụng.
+<img src="images/connect_package_name.png"/>
+
+6. Cung cấp **Key hash** cho ứng dụng.
+- Để đảm bảo tính xác thực giữa ứng dụng và Facebook, cần cung cấp **key hash** Android cho môi trường phát triển của mình.
+- Bạn sẽ có duy nhất một **Develop Key Hash** cho mỗi môi trường phát triển Android.
+- Để tạo **Key dev** đối với Linux sử dụng lệnh dưới, những nền tảng khác xem <a href="https://medium.com/mindorks/generate-hash-key-for-facebook-and-sha-1-key-for-google-maps-in-android-studio-48d92e4f3c05" rel="nofollow">tại đây</a>
+  + keytool -exportcert -alias androiddebugkey -keystore debug.keystore | openssl sha1 -binary | openssl base64
+  
+- Khóa tạo ra là một chuỗi gồm 28 ký tự, sau đó sao chép và điền vào trường Key Hash:
+<img src="images/key_hash.png"/>
+7. Bật đăng nhập một lần cho ứng dụng
+<img src="images/single_sign_on.png"/>
+
+8. Thêm nút Đăng nhập Facebook.
+- Cách đơn giản nhất để thêm là sử dụng **LoginButton** từ SDK. Đây là thành phần giao diện người dùng bao phủ chức năng có trong **LoginManager**.
+
+9 Đăng ký gọi lại
+- Tạo một đối tượng callbackManager để nhận các phản hồi đăng nhập:
+<img src=""/>
+
+- Thêm các quyền cần thiết khi tiến hành Login với tài khoản Facebook. Tham khảo <a href="https://developers.facebook.com/docs/facebook-login/android/permissions">tại đây</a>
+<img src=""/>
+
+- Đăng ký callback để nhận trạng thái đăng nhập:
+  + Nếu sử dụng **LoginButton*:
+  + Nếu sử dụng Custom button thì sử dụng **LoginManager*
+  
+- Chuyển kết quả đăng nhập đến LoginManager thông qua callbackManager.
+
+- Lấy thông tin user thông qua đối tượng Profile:
+
+10. Kiểm tra trạng thái đăng nhập
+- Ứng dụng của bạn chỉ có thể có một người đăng nhập mỗi lần. Facebook SDK sẽ lưu trữ dữ liệu này, bạn có thể kiểm tra xem người dùng đã đăng nhập chưa bằng cách sau:
+
+## Theo dõi Access Token và Profile
+- Nếu muốn ứng dụng cập nhật **access_token** và trang cá nhân hiện tại, bạn có thể triển khai lớp **AccessTokenTracker** và **ProfileTracker**.
+- Các class này sẽ lắng nghe khi có sự thay đổi, sử dụng bộ thu nội bộ nên bạn cần gọi stopTracking() trong onDestroy().
+- Theo dõi **access_token**:
+
+<img src="images/tracking_token.png"/>
+
+- Theo dõi trang cá nhân:
+
+<img src="images/tracking_profile.png"/>
