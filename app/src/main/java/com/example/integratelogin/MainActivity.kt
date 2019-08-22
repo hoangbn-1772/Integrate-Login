@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.integratelogin.facebook.FacebookLoginActivity
 import com.example.integratelogin.google.GoogleLoginActivity
+import com.example.integratelogin.twitter.TwitterLoginActivity
 import com.facebook.CallbackManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_fb_login -> moveScreen(FacebookLoginActivity::class.java)
 
             R.id.btn_gg_login -> moveScreen(GoogleLoginActivity::class.java)
+
+            R.id.btn_twitter_login -> moveScreen(TwitterLoginActivity::class.java)
         }
     }
 
@@ -37,6 +40,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btn_fb_login?.setOnClickListener(this)
 
         btn_gg_login?.setOnClickListener(this)
+
+        btn_twitter_login.setOnClickListener(this)
     }
 
     private fun moveScreen(screen: Class<*>) {

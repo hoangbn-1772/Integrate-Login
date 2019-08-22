@@ -22,4 +22,13 @@
         android:layout_marginTop="@dimen/dp_24"
         android:text="@string/google_login"/>
 
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_twitter_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_gg_login"
+        android:layout_marginTop="@dimen/dp_24"
+        android:text="@string/custom_login_twitter"/>
+
 </RelativeLayout>

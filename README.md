@@ -10,7 +10,7 @@
 - Quay lại phần đặt vấn đề một chút, bây giờ bạn chỉ cần có một tài khoản Facebook/Google/Twitter là bạn có thể đăng nhập vào nhiều ứng dụng khác nhau mà không phải nhớ tài khoản nữa (awesome)
 
 - OAuth2 làm việc với 4 đối tượng với các vai trò khác nhau:
-  + Resource Owner (User): là chủ sở hữu dữ liệu muốn chia sẻ. Quyền truy cập vào dữ liệu của người dùng được giới hạn trong phạm vi được cấp (quyền truy cập đọc hoặc ghi)
+  + Resource Owner (User): là chủ sở hữu dữ liệu muốn chia sẻ.
   + Client (Application): Là ứng dụng muốn truy cập vào dữ liệu của người dùng. Cần phải được người dùng ủy quyền và được xác thực bởi API (Facebook, Twitter, Google...)
   + Resource Server (API): là server chứa thông tin dữ liệu cần chia sẻ.
   + Authorization Server (API): Kiểm tra thông tin người dùng, sau đó cung cấp **token** để truy cập vào dữ liệu cho client
@@ -69,8 +69,6 @@
 <img src="https://assets.digitalocean.com/articles/oauth/implicit_flow.png" alt="Implicit Flow">
 
   + User yêu cầu access_token: Tương tự Authorization Code, chỉ khác ở tham số response_type=token
-  <h3 id="step-2-user-authorizes-application">Step 2: User Authorizes Application</h3>
-  
   + User ủy quyền cho Application: Tương tự Authorization Code
   + Browser nhận access_token thông qua Redirect URI:
   <pre class="code-pre "><code langs="">https://dropletbook.com/callback#token=<span class="highlight">ACCESS_TOKEN</span>
@@ -95,13 +93,11 @@
 
 ## Sử dụng Access Token
 - Sau khi đã có **access_token**, có thể sử dụng để truy cập vào tài khoản người dùng thông qua API.
-<code langs="">curl -X POST -H "Authorization: Bearer <span class="highlight">ACCESS_TOKEN</span>""https://api.digitalocean.com/v2/<span class="highlight">$OBJECT</span>" 
-</code>
+	+ curl -X POST -H "Authorization: Bearer ACCESS_TOKEN""https://API_SERVER.DOMAIN/v2/$OBJECT"
 
 ## Refresh Token Flow
 - Nếu **access_token** hết hạn, thì khi sử dụng để gọi API sẽ gặp thông báo lỗi "Invalid Token Error". Đừng lo, nếu Service hỗ trợ cơ chế **refresh token** ta có thể sử dụng để yêu cầu **access_token** mới.
-<code langs="">https://cloud.digitalocean.com/v1/oauth/token?grant_type=refresh_token&amp;client_id=<span class="highlight">CLIENT_ID</span>&amp;client_secret=<span class="highlight">CLIENT_SECRET</span>&amp;refresh_token=<span class="highlight">REFRESH_TOKEN</span>
-</code>
+	+ https://OAUTH_SERVER.DOMAIN/oauth/token?grant_type=refresh_token&client_id=CLIENT_ID&client_secret=CLIENT_SECRET&refresh_token=REFRESH_TOKEN
 
 # Login with Facebook
 - Facebook SDK dành cho Android cho phép mọi người đăng nhâp vào ứng dụng bằng tài khoản Facebook.
@@ -254,6 +250,8 @@ Authenticating Your Client</a>
 
 <img src="images/handle_sign_in_result.png"/>
 
+<img src="images/google_lg_fl.png" width='400' height='800'/>
+
 5. Lấy thông tin User
 <img src="images/get_user_profile.png"/>
 
@@ -271,3 +269,49 @@ Authenticating Your Client</a>
 ### Cho phép quyền truy cập Server-Side
 <a href="https://developers.google.com/identity/sign-in/android/offline-access">Enabling Server-Side Access</a>
 
+# Login with Twitter
+- Để sử dụng tính năng này, đảm bảo rằng đã đăng nhập vào Twitter.
+1. Tạo một App trong <a href="https://developer.twitter.com/en/apps">liên kết này</a>.
+- Điền đầy đủ thông tin vào form **Application Details**, Nếu muốn xác thực qua Twitter thì trường **Callback URLs** điền **twittersdk://**
+2. Sau khi tạo xong, bạn sẽ nhận được API Key và API Secret. Sao chép cả 2 key này vào trong file **string.xml**
+<img src="images/created_app_twitter.png"/>
+
+3. Add dependencies. <a href="https://github.com/twitter-archive/twitter-kit-android/wiki">Read more about Twitter APIs</a>
+<img src="images/dependencies_tw.png"/>
+
+4. Add **TwitterLoginButton** trong layout
+- Ta có thể sử dụng default button hoặc có thể custom.
+<img src="images/tw_button_login.png"/>
+
+5. Cấu hình Twitter để sử dụng trong ứng dụng
+- Tạo Twitter Kit:
+	+ Cấu hình mặc định or cấu hình tùy chỉnh thông qua đối tượng **TwitterConfig**
+<img src="images/twitter_kit.png"/>
+
+6. Thực hiện luồng login
+- Tạo một callback để nhận kết quả login trả về:
+	+ Default button
+<img src="images/callback_btn_default.png"/>
+	
+	+ Custom button:
+<img src="images/callback_custom_button.png"/>
+
+-  Nhận dữ liệu trả về trong **onActivityResult()**:
+<img src="images/tw_onActivityResult.png"/>
+
+<img src="images/tw_lg_fl.png" width='400' height='800'/>
+
+7. Lấy dữ liệu khi đã login thành công thông qua đối tượng **TwitterSession**
+<img src="images/get_user_tw.png"/>
+
+8. Kiểm tra đăng nhập
+- Để check xem User đã login chưa, sử dụng **TwitterCore** để check xem có **activeSession** không, và có **token** trả về hay không
+<img src="images/check_login_tw.png"/>
+
+9. Đăng xuất
+<img src="images/tw_logout.png"/>
+
+# Tài liệu tham khảo
+- Facebook: https://developers.facebook.com/docs/facebook-login/android
+- Google: https://developers.google.com/identity/sign-in/android/start-integrating
+- Twitter: https://github.com/twitter-archive/twitter-kit-android/wiki

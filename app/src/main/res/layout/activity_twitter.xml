@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dp_8"
+    tools:context=".twitter.TwitterActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_avatar_tw"
+        android:layout_width="@dimen/dp_96"
+        android:layout_height="@dimen/dp_96"
+        android:layout_centerHorizontal="true"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt_name_tw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_avatar_tw"
+        android:layout_marginTop="@dimen/dp_8"
+        android:gravity="center"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt_screen_name_tw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_name_tw"
+        android:layout_marginTop="@dimen/dp_8"
+        android:gravity="center"/>
+
+</RelativeLayout>

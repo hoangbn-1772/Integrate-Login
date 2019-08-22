@@ -14,4 +14,10 @@
     </string>
     <string name="google_logout">Google Logout</string>
 
+    <!--Twitter-->
+    <string name="custom_login_twitter">Twitter Login</string>
+    <string name="api_key_twitter">NjtLr4ICDtk5aFyg1I57sp2VL</string>
+    <string name="api_secret_key_twitter">38GLzyV03YphbpV5mYLXQoJrJGP66Db1KEH3AK9ELPu9ZjfCiS
+    </string>
+
 </resources>

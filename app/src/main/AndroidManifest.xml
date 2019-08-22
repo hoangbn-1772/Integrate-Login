@@ -13,14 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".google.GoogleActivity">
+        <activity android:name=".twitter.TwitterActivity">
         </activity>
-        <activity android:name=".google.GoogleLoginActivity">
-        </activity>
-        <activity android:name=".facebook.FacebookLoginActivity">
-        </activity>
-        <activity android:name=".facebook.SecondActivity">
-        </activity>
+        <activity android:name=".twitter.TwitterLoginActivity"/>
+        <activity android:name=".google.GoogleActivity"/>
+        <activity android:name=".google.GoogleLoginActivity"/>
+        <activity android:name=".facebook.FacebookLoginActivity"/>
+        <activity android:name=".facebook.SecondActivity"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

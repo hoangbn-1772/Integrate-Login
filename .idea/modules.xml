@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Integrate-Login.iml" filepath="$PROJECT_DIR$/Integrate-Login.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Integrate-Login.iml" filepath="$PROJECT_DIR$/.idea/Integrate-Login.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
