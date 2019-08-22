@@ -7,19 +7,18 @@
     android:padding="@dimen/dp_8"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_fb_login"
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/btn_facebook_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_8"
-        android:text="@string/facebook_login"/>
+        android:layout_marginTop="@dimen/dp_40"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_gg_login"
+        android:id="@+id/btn_custom_fb_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_fb_login"
-        android:layout_marginTop="@dimen/dp_24"
-        android:text="@string/google_login"/>
+        android:layout_below="@id/btn_facebook_login"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="@string/custom_fb_login"/>
 
 </RelativeLayout>

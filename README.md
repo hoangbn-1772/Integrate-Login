@@ -108,7 +108,7 @@
 - Làm theo các bước duới đây để thêm Facebook Login vào ứng dụng của bạn:
 - Link: <a href="https://developers.facebook.com/docs/facebook-login/android?sdk=maven">Facebook Login</a>
   
-1. Chọn ứng dụng hoặc tạo ứng dụng mới
+1. Chọn ứng dụng hoặc tạo ứng dụng mới. Bạn phải có ứng dụng trên <a href="https://developers.facebook.com/apps/482332635894680/dashboard/">facebook for developers</a>
 <img src="images/choose_app_st1.png"/>
 
 2. Tải xuống ứng dụng Facebook nếu chưa có: <a role="button" class="_42ft _3g_o _3g_p _3g_u" href="https://play.google.com/store/apps/details?id=com.facebook.katana&amp;fbclid=IwAR2sahItcGmas46TkPcG47R38gnLx860GRQPM2ZW2GYSTi3iM50KyeZEwuM" target="_blank" rel="nofollow" data-lynx-mode="asynclazy" data-lynx-uri="https://l.facebook.com/l.php?u=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.facebook.katana%26fbclid%3DIwAR2sahItcGmas46TkPcG47R38gnLx860GRQPM2ZW2GYSTi3iM50KyeZEwuM&amp;h=AT0q1EE4F3Qa3TnATRjFCsGKeG1GiyqrANXN-mz-yJsDpBlgPqQZKKB4VOvdbP4o0MFidckGKowhT1vGWc6KycApb9hC8hCkUa47Y5tcf-R35JT3OfAXde2cXx77EQ">Tải xuống Facebook dành cho Android</a>
@@ -157,19 +157,23 @@
 <img src="images/login_permission.png"/>
 
 - Đăng ký callback để nhận trạng thái đăng nhập:
-  + Nếu sử dụng **LoginButton*:
+  + Nếu sử dụng **LoginButton**:
 <img src="images/register_button_facebook.png"/>
 
-  + Nếu sử dụng Custom button thì sử dụng **LoginManager*
+  + Nếu sử dụng Custom button thì sử dụng **LoginManager**
 
 <img src="images/register_custom_button.png"/>
   
-- Chuyển kết quả đăng nhập đến LoginManager thông qua callbackManager.
+- Chuyển kết quả đăng nhập đến LoginManager thông qua callbackManager:
+<img src="images/onActivityResult.png"/>
 
 - Lấy thông tin user thông qua đối tượng Profile:
+<pre><code>val user = Profile.getCurrentProfile()
+</code></pre>
 
 10. Kiểm tra trạng thái đăng nhập
 - Ứng dụng của bạn chỉ có thể có một người đăng nhập mỗi lần. Facebook SDK sẽ lưu trữ dữ liệu này, bạn có thể kiểm tra xem người dùng đã đăng nhập chưa bằng cách sau:
+<img src="images/login_fb_status.png"/>
 
 ## Theo dõi Access Token và Profile
 - Nếu muốn ứng dụng cập nhật **access_token** và trang cá nhân hiện tại, bạn có thể triển khai lớp **AccessTokenTracker** và **ProfileTracker**.
@@ -181,3 +185,89 @@
 - Theo dõi trang cá nhân:
 
 <img src="images/tracking_profile.png"/>
+
+
+# Login with Google
+- Trước khi tích hợp Google Sign-in trong ứng dụng, cần phải configure Google API Console và thiết lập Android Studio.
+- Tham khảo: <a href="https://developers.google.com/identity/sign-in/android/start-integrating">Google Sign-in</a>
+
+## Yêu cầu
+- Thiết bị phải chạy Android 4.1 trở lên có Google Play Store hoặc Emulator có AVD chạy Google APIs dựa trên Android 4.2.2 trở lên, có Google Play Service version 15.0.0 trở lên.
+- Version mới nhất của Android SDK, bao gồm SDK Tools.
+- Project cấu hình từ Android 4.1 trở lên.
+- Google Play Service: Tools -> SDK Manager -> SDK Tools -> Google Repository
+
+## Tích hợp Google Sign-In vào ứng dụng
+### Add Google Play Service.
+- Trong top-level build.gradle:
+<img src="images/google_repo.png"/>
+
+- Trong app-level build.gradle:
+<img src="images/dependencies.png"/>
+
+### Cấu hình Google API Console.
+<img src="images/configure_1.png"/>
+
+<img src="images/configure_2.png"/>
+
+- Cần cung cấp mã SHA-1 để tạo OAuth2 client và API key cho ứng dụng. Để tạo SHA-1 xem <a href="https://developers.google.com/android/guides/client-auth">
+Authenticating Your Client</a>
+<img src="images/configure_3.png"/>
+
+- Kết quả configure: <a href="https://console.developers.google.com/apis/credentials?authuser=0&project=integrate-login-1566443852554&folder&organizationId=810507265186">API Console</a>
+<img src="images/result_configure.png"/>
+
+- Nếu ứng dụng của bạn sử dụng <a href="https://developers.google.com/identity/sign-in/android/backend-auth">authenticates with a backend server</a> hoặc <a href="https://developers.google.com/identity/sign-in/android/offline-access">accesses Google APIs from your backend server</a>, bạn phải lấy **OAuth2 client ID** đã được tạo trong server của bạn.
+	+ Mở <a href="https://console.developers.google.com/apis/credentials?project=integrate-login-1566443852554&folder&organizationId=810507265186">Credentials page</a> trong API Console
+	+ Web application type client ID là OAuth2 client ID
+
+<img src="images/oauth_client_id.png"/>
+
+- Thêm **client ID** này vào **requestIdToken** hoặc **requestServerAuthCode** khi tạo đối tượng **GoogleSignInOptions**
+
+### Add Sign-In
+1. Configure Google Sign-in and the GoogleSignInClient object
+- Trong method onCreate(), tạo đối tượng **GoogleSignInOptions**:
+<img src="images/google_sign_in_options.png"/>
+
+- Có thể thêm scope để truy cập Google APIs bằng cách thêm **requestScopes**. Xem thêm <a href="https://developers.google.com/identity/sign-in/android/additional-scopes">Requesting Additional Scopes.</a>
+- Sau đó tạo đối tượng **GoogleSignInClient** :
+<img src="images/google_sign_in_client.png"/>
+
+2. Kiểm tra đăng nhập
+- Trong method onStart(), bạn có thể kiểm tra xem user đã đăng nhập bằng Google chưa:
+<img src="images/check_login_status.png"/>
+
+3. Add Google Sign-in button.
+- Thêm **SignInButton** vào layout:
+<img src="images/sign_in_button.png"/>
+
+- Nếu sử dụng sign-in button mặc định, có thể tùy chỉnh kích thước button:
+<img src="images/set_size_button.png"/>
+
+4. Bắt đầu luồng đăng nhập
+- Mở màn hình chọn tài khoản đăng nhập thông qua **mGoogleSignInClient.signInIntent**
+<img src="images/start_flow_sign_in.png"/>
+
+- Sau khi user đăng nhập, đối tượng **GoogleSignInAccount** được trả về trong onActivityResult(), đối tượng này chứa thông tin user.
+<img src="images/google_sign_in_account.png"/>
+
+<img src="images/handle_sign_in_result.png"/>
+
+5. Lấy thông tin User
+<img src="images/get_user_profile.png"/>
+
+6. Đăng xuất
+- Sử dụng method **signOut**:
+<img src="images/sign_out_gg.png"/>
+
+7. Disconnect account
+- Bạn nên cung cấp cho user đã đăng nhập bằng Google khả năng ngắt kết nối tài khoản Google khỏi ứng dụng. Nếu user xóa tài khoản của họ, bạn phải xóa thông tin mà ứng dụng thu thập được từ Google API. Bằng cách sử dụng method **revokeAccess**
+<img src="images/disconnect_account.png"/>
+
+### Xác thực với backend server
+<a href="https://developers.google.com/identity/sign-in/android/backend-auth">Authenticate with a backend server</a>
+
+### Cho phép quyền truy cập Server-Side
+<a href="https://developers.google.com/identity/sign-in/android/offline-access">Enabling Server-Side Access</a>
+

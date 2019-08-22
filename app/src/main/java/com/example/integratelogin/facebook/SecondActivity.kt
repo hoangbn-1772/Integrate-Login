@@ -1,20 +1,20 @@
-package com.example.integratelogin
+package com.example.integratelogin.facebook
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.example.integratelogin.R
 import com.facebook.*
 import com.facebook.login.LoginManager
 import kotlinx.android.synthetic.main.activity_second.*
 
 class SecondActivity : AppCompatActivity(), View.OnClickListener {
 
-    private val user by lazy { intent.getParcelableExtra<Profile>(MainActivity.EXTRA_USER) }
+    private val user by lazy { intent.getParcelableExtra<Profile>(FacebookLoginActivity.EXTRA_USER) }
 
     private val callbackManager by lazy { CallbackManager.Factory.create() }
 
@@ -41,6 +41,7 @@ class SecondActivity : AppCompatActivity(), View.OnClickListener {
         btn_logout?.setOnClickListener(this)
         setUserProfile()
         trackingToken()
+        trackingProfile()
     }
 
     @SuppressLint("SetTextI18n")
@@ -72,8 +73,12 @@ class SecondActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        accessTokenTracker.stopTracking()
-        profileTracker.stopTracking()
+        if (::accessTokenTracker.isInitialized) {
+            accessTokenTracker.stopTracking()
+        }
+        if (::profileTracker.isInitialized) {
+            profileTracker.stopTracking()
+        }
     }
 
     private fun trackingProfile() {
@@ -90,7 +95,7 @@ class SecondActivity : AppCompatActivity(), View.OnClickListener {
         fun getIntent(context: Context, user: Profile): Intent {
             val intent = Intent(context, SecondActivity::class.java)
             val bundle = Bundle().apply {
-                putParcelable(MainActivity.EXTRA_USER, user)
+                putParcelable(FacebookLoginActivity.EXTRA_USER, user)
             }
             intent.putExtras(bundle)
             return intent

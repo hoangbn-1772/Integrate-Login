@@ -5,27 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/dp_8"
-    tools:context=".facebook.SecondActivity">
+    tools:context=".google.GoogleActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_avatar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="@dimen/dp_96"
+        android:layout_height="@dimen/dp_96"
+        android:layout_centerHorizontal="true"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/img_avatar"
-        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_24"
         android:gravity="center"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_logout"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txt_username"
         android:layout_marginTop="@dimen/dp_24"
-        android:text="@string/custom_fb_logout"/>
+        android:gravity="center"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_google_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/google_logout"/>
 
 </RelativeLayout>
